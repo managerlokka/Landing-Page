@@ -180,13 +180,18 @@
         .price-card.featured::before { content: 'MOST POPULAR'; position: absolute; top: -11px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #fff; padding: 0.2rem 0.75rem; border-radius: 100px; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em; -webkit-text-fill-color: #fff; }
         .price-card:hover { transform: translateY(-4px); }
         .price-card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.3rem; }
-        .price-card .price { font-size: 2rem; font-weight: 800; margin: 0.7rem 0 0.15rem; letter-spacing: -0.02em; }
+        .price-card .price { font-size: 2rem; font-weight: 800; margin: 0.7rem 0 0.15rem; letter-spacing: -0.02em; transition: all 0.3s; }
         .price-card .price small { font-size: 0.8rem; font-weight: 400; color: var(--text-muted); -webkit-text-fill-color: var(--text-muted); }
         .price-note { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 1rem; }
         .price-features { list-style: none; text-align: left; margin-bottom: 1.3rem; }
         .price-features li { padding: 0.3rem 0; font-size: 0.82rem; color: var(--text-sub); display: flex; gap: 0.45rem; align-items: center; }
         .pf-check { color: var(--green); flex-shrink: 0; } .pf-x { color: var(--text-muted); opacity: 0.4; flex-shrink: 0; }
         .price-card .btn { width: 100%; justify-content: center; }
+        .billing-toggle { display: flex; justify-content: center; gap: 0.3rem; margin-bottom: 2rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 100px; padding: 0.25rem; max-width: 420px; margin-left: auto; margin-right: auto; }
+        .billing-toggle button { padding: 0.5rem 1.2rem; border-radius: 100px; border: none; background: transparent; color: var(--text-sub); font-weight: 600; font-size: 0.82rem; cursor: pointer; transition: all 0.25s; font-family: var(--font); }
+        .billing-toggle button.active { background: var(--primary); color: #fff; -webkit-text-fill-color: #fff; box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+        .billing-toggle button:hover:not(.active) { color: var(--text); }
+        .save-badge { display: inline-block; background: rgba(16,185,129,0.15); color: var(--green); font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 100px; margin-left: 0.3rem; vertical-align: middle; }
 
         /* HOW IT WORKS */
         .steps-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.8rem; }
@@ -337,7 +342,7 @@
             <div class="stats-grid">
                 <div class="stat-card animate"><div class="stat-icon">📅</div><h3 class="text-gradient">4 Days</h3><p>Free Trial</p></div>
                 <div class="stat-card animate delay-1"><div class="stat-icon">⚡</div><h3 class="text-gradient">100%</h3><p>Offline Ready</p></div>
-                <div class="stat-card animate delay-2"><div class="stat-icon">📊</div><h3 class="text-gradient">3 Plans</h3><p>For Every Business</p></div>
+                <div class="stat-card animate delay-2"><div class="stat-icon">📊</div><h3 class="text-gradient">4 Plans</h3><p>For Every Business</p></div>
             </div>
         </div>
     </section>
@@ -423,6 +428,11 @@
                 <h2 style="margin-top:0.8rem;">Plans for<br/><span class="text-gradient">Every Business Size</span></h2>
                 <p>Start with a 4-day free trial. No credit card needed.</p>
             </div>
+            <div class="billing-toggle" id="billingToggle">
+                <button class="active" data-term="monthly" onclick="switchBilling('monthly')">Monthly</button>
+                <button data-term="yearly" onclick="switchBilling('yearly')">Yearly <span class="save-badge">Save 17%</span></button>
+                <button data-term="two_year" onclick="switchBilling('two_year')">2 Years <span class="save-badge">Save 17%</span></button>
+            </div>
             <div class="pricing-grid">
                 <div class="price-card animate">
                     <h3>Free Trial</h3>
@@ -438,7 +448,7 @@
                 </div>
                 <div class="price-card animate delay-1">
                     <h3>🔵 Starter</h3>
-                    <div class="price">LKR 1,250 <small>/month</small></div>
+                    <div class="price" id="price-starter">LKR 1,250 <small>/month</small></div>
                     <p class="price-note">Up to 250 orders per cycle</p>
                     <ul class="price-features">
                         <li><span class="pf-check">✓</span> 250 orders/month</li>
@@ -450,7 +460,7 @@
                 </div>
                 <div class="price-card featured animate delay-2">
                     <h3>🟣 Pro</h3>
-                    <div class="price">LKR 1,950 <small>/month</small></div>
+                    <div class="price" id="price-pro">LKR 1,950 <small>/month</small></div>
                     <p class="price-note">Up to 600 orders per cycle</p>
                     <ul class="price-features">
                         <li><span class="pf-check">✓</span> 600 orders/month</li>
@@ -462,7 +472,7 @@
                 </div>
                 <div class="price-card animate delay-3">
                     <h3>🟠 Enterprise</h3>
-                    <div class="price">LKR 3,450 <small>/month</small></div>
+                    <div class="price" id="price-enterprise">LKR 3,450 <small>/month</small></div>
                     <p class="price-note">3,000 orders + LKR 5/extra</p>
                     <ul class="price-features">
                         <li><span class="pf-check">✓</span> 3,000 included orders</li>
@@ -520,7 +530,7 @@
             </div>
             <div class="faq-list">
                 <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Is there a free trial? <span class="arrow">▼</span></div><div class="faq-a">Yes! You get a 4-day free trial with full access to all features. No credit card required.</div></div>
-                <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">How does the subscription work? <span class="arrow">▼</span></div><div class="faq-a">Choose a monthly plan (Starter, Pro, or Enterprise) based on your order volume. Contact us via WhatsApp to activate.</div></div>
+                <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">How does the subscription work? <span class="arrow">▼</span></div><div class="faq-a">Choose a plan (Starter, Pro, or Enterprise) and billing term (Monthly, Yearly, or 2-Year) based on your needs. Yearly and 2-Year plans save you 2 and 4 months respectively. Contact us via WhatsApp to activate.</div></div>
                 <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">What happens after the trial ends? <span class="arrow">▼</span></div><div class="faq-a">After 4 days, subscribe to continue. Your data is preserved — just activate a key and pick up where you left off.</div></div>
                 <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">How are orders counted? <span class="arrow">▼</span></div><div class="faq-a">Usage is based on orders created during your billing cycle. Deleted/cancelled orders do not reduce the count.</div></div>
                 <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Do deleted orders reduce my usage count? <span class="arrow">▼</span></div><div class="faq-a">No. Once created, an order counts permanently. This ensures fair and consistent billing.</div></div>
@@ -609,6 +619,23 @@
         }
         function downloadApp() { window.open(downloadUrl, '_blank'); }
         fetchLatestRelease();
+
+        // BILLING TOGGLE
+        const billingPrices = {
+            starter:    { monthly: '1,250', yearly: '12,500', two_year: '25,000' },
+            pro:        { monthly: '1,950', yearly: '19,500', two_year: '39,000' },
+            enterprise: { monthly: '3,450', yearly: '34,500', two_year: '69,000' }
+        };
+        const billingLabels = { monthly: '/month', yearly: '/year', two_year: '/2 years' };
+
+        function switchBilling(term) {
+            document.querySelectorAll('.billing-toggle button').forEach(b => b.classList.remove('active'));
+            document.querySelector(`.billing-toggle button[data-term="${term}"]`).classList.add('active');
+            ['starter', 'pro', 'enterprise'].forEach(plan => {
+                const el = document.getElementById(`price-${plan}`);
+                if (el) el.innerHTML = `LKR ${billingPrices[plan][term]} <small>${billingLabels[term]}</small>`;
+            });
+        }
 
         // THEME TOGGLE
         function toggleTheme() {
