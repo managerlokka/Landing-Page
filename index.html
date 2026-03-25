@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manager Lokka — Order Management System for Sri Lankan Businesses</title>
+    <meta name="description" content="Streamline your business with Manager Lokka. Track orders, manage deliveries, print invoices and labels — all in one powerful desktop app. Start your 4-day free trial today." />
+    <meta name="keywords" content="order management, Sri Lanka, business software, delivery tracking, invoice, OMS, desktop app" />
+    <link rel="icon" href="logo.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        /* ===========================
+           DARK THEME (DEFAULT)
+           =========================== */
+        :root, [data-theme="dark"] {
+            --bg: #0F172A;
+            --bg-alt: #020617;
+            --bg-card: #111827;
+            --bg-card-hover: #1E293B;
+            --bg-nav: rgba(15, 23, 42, 0.85);
+            --text: #FFFFFF;
+            --text-sub: #94A3B8;
+            --text-muted: #64748B;
+            --primary: #2563EB;
+            --primary-hover: #1D4ED8;
+            --primary-dark: #1E3A8A;
+            --primary-glow: rgba(37, 99, 235, 0.15);
+            --accent: #06B6D4;
+            --green: #10B981;
+            --border: #1F2937;
+            --border-light: #334155;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.5);
+            --shadow-glow: 0 0 40px rgba(37, 99, 235, 0.1);
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            --radius: 14px;
+            --radius-sm: 10px;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --gradient-text: linear-gradient(90deg, #2563EB, #06B6D4);
+        }
+
+        /* ===========================
+           LIGHT THEME
+           =========================== */
+        [data-theme="light"] {
+            --bg: #F8FAFC;
+            --bg-alt: #FFFFFF;
+            --bg-card: #FFFFFF;
+            --bg-card-hover: #F1F5F9;
+            --bg-nav: rgba(248, 250, 252, 0.9);
+            --text: #0F172A;
+            --text-sub: #64748B;
+            --text-muted: #94A3B8;
+            --primary: #2563EB;
+            --primary-hover: #1D4ED8;
+            --primary-dark: #1E3A8A;
+            --primary-glow: rgba(37, 99, 235, 0.08);
+            --accent: #0891B2;
+            --green: #059669;
+            --border: #E2E8F0;
+            --border-light: #CBD5E1;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+            --shadow-glow: 0 0 40px rgba(37, 99, 235, 0.05);
+            --card-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        }
+
+        html { scroll-behavior: smooth; }
+        body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.7; overflow-x: hidden; transition: background 0.3s, color 0.3s; }
+        img { max-width: 100%; display: block; }
+        a { color: inherit; text-decoration: none; }
+
+        .container { max-width: 1140px; margin: 0 auto; padding: 0 2rem; }
+        .section-pad { padding: 6rem 0; }
+        .text-center { text-align: center; }
+        .text-gradient { background: var(--gradient-text); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .badge { display: inline-block; padding: 0.3rem 0.9rem; border-radius: 100px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.03em; background: var(--primary-glow); color: var(--primary); border: 1px solid rgba(37,99,235,0.2); }
+        [data-theme="dark"] .badge { color: #60A5FA; }
+
+        /* BUTTONS */
+        .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.8rem 1.6rem; border-radius: 10px; font-weight: 600; font-size: 0.92rem; border: none; cursor: pointer; transition: all 0.25s ease; font-family: var(--font); }
+        .btn-primary { background: var(--primary); color: #fff; -webkit-text-fill-color: #fff; box-shadow: 0 10px 25px rgba(37,99,235,0.3); }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 14px 30px rgba(37,99,235,0.4); }
+        .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border-light); -webkit-text-fill-color: var(--text); }
+        .btn-outline:hover { border-color: var(--primary); color: var(--primary); -webkit-text-fill-color: var(--primary); transform: translateY(-2px); }
+        .btn-lg { padding: 14px 24px; font-size: 1rem; }
+        .btn-white { background: #fff; color: var(--primary); -webkit-text-fill-color: var(--primary); font-weight: 700; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .btn-white:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(0,0,0,0.3); }
+
+        /* NAVBAR */
+        .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 0.9rem 0; transition: all 0.3s ease; }
+        .navbar.scrolled { background: var(--bg-nav); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 0.6rem 0; }
+        .navbar .container { display: flex; align-items: center; justify-content: space-between; }
+        .nav-brand { display: flex; align-items: center; gap: 0.6rem; font-weight: 700; font-size: 1.15rem; }
+        .nav-brand img { width: 34px; height: 34px; border-radius: 8px; }
+        .nav-links { display: flex; align-items: center; gap: 1.8rem; list-style: none; }
+        .nav-links a { font-size: 0.85rem; font-weight: 500; color: var(--text-sub); transition: color 0.2s; }
+        .nav-links a:hover { color: var(--text); }
+        .nav-cta .btn { padding: 0.5rem 1.2rem; font-size: 0.82rem; }
+        .mobile-toggle { display: none; background: none; border: none; color: var(--text); font-size: 1.4rem; cursor: pointer; }
+        .theme-toggle { background: var(--bg-card); border: 1px solid var(--border); color: var(--text); padding: 0.4rem 0.7rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+        .theme-toggle:hover { border-color: var(--primary); }
+
+        /* HERO */
+        .hero { padding: 8rem 0 4rem; position: relative; overflow: hidden; background: linear-gradient(135deg, #0F172A, #020617); }
+        [data-theme="light"] .hero { background: linear-gradient(180deg, #EFF6FF 0%, #F8FAFC 100%); }
+        .hero .container { position: relative; z-index: 1; }
+        .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3.5rem; align-items: center; }
+        .hero-content h1 { font-size: 3.2rem; font-weight: 800; line-height: 1.1; margin-bottom: 1.2rem; letter-spacing: -0.02em; }
+        .hero-content p { font-size: 1.05rem; color: var(--text-sub); margin-bottom: 1.8rem; max-width: 480px; line-height: 1.7; }
+        .hero-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+
+        /* STATS CARDS */
+        .stats-bar { padding: 4rem 0; border-top: 1px solid var(--border); }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+        .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; text-align: center; box-shadow: var(--card-shadow); transition: all 0.3s; }
+        .stat-card:hover { border-color: rgba(37,99,235,0.3); transform: translateY(-2px); }
+        .stat-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .stat-card h3 { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.15rem; }
+        .stat-card p { font-size: 0.82rem; color: var(--text-muted); }
+
+        /* APP PREVIEW */
+        .hero-visual { position: relative; }
+        .app-preview { background: #111827; border: 1px solid #1F2937; border-radius: 14px; overflow: hidden; box-shadow: 0 20px 60px rgba(37,99,235,0.25), 0 0 80px rgba(37,99,235,0.08); transform: perspective(1200px) rotateY(-5deg) rotateX(2deg); transition: transform 0.5s ease; }
+        .app-preview:hover { transform: perspective(1200px) rotateY(0) rotateX(0); }
+        .app-titlebar { display: flex; align-items: center; gap: 0.5rem; padding: 0.65rem 0.9rem; background: rgba(0,0,0,0.4); border-bottom: 1px solid #1F2937; }
+        .dot { width: 9px; height: 9px; border-radius: 50%; }
+        .dot-r { background: #EF4444; } .dot-y { background: #F59E0B; } .dot-g { background: #10B981; }
+        .app-body { padding: 1rem; display: grid; grid-template-columns: 130px 1fr; gap: 0.8rem; min-height: 230px; }
+        .mock-sidebar { display: flex; flex-direction: column; gap: 0.35rem; }
+        .mock-nav { padding: 0.4rem 0.6rem; border-radius: 6px; font-size: 0.68rem; color: #64748B; display: flex; align-items: center; gap: 0.4rem; }
+        .mock-nav.active { background: rgba(37,99,235,0.15); color: #60A5FA; }
+        .mock-main { display: flex; flex-direction: column; gap: 0.5rem; }
+        .mock-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+        .mock-stat-card { background: rgba(37,99,235,0.08); border: 1px solid rgba(37,99,235,0.12); border-radius: 8px; padding: 0.5rem; text-align: center; }
+        .mock-stat-card .val { font-size: 0.95rem; font-weight: 700; color: #60A5FA; }
+        .mock-stat-card .lbl { font-size: 0.55rem; color: #64748B; }
+        .mock-table { background: rgba(0,0,0,0.25); border-radius: 8px; overflow: hidden; }
+        .mock-row { display: grid; grid-template-columns: 1fr 1fr 70px; padding: 0.35rem 0.6rem; font-size: 0.62rem; border-bottom: 1px solid rgba(0,0,0,0.3); align-items: center; color: #94A3B8; }
+        .mock-row.header { font-weight: 600; color: #64748B; background: rgba(0,0,0,0.25); font-size: 0.58rem; text-transform: uppercase; }
+        .mock-badge { padding: 0.1rem 0.35rem; border-radius: 100px; font-size: 0.52rem; font-weight: 600; }
+        .mock-badge.pending { background: rgba(245,158,11,0.15); color: #FBBF24; }
+        .mock-badge.dispatched { background: rgba(37,99,235,0.15); color: #60A5FA; }
+        .mock-badge.delivered { background: rgba(16,185,129,0.15); color: #34D399; }
+
+        /* SECTION HEADERS */
+        .section-header { margin-bottom: 3.5rem; }
+        .section-header h2 { font-size: 2.2rem; font-weight: 700; margin-bottom: 0.8rem; letter-spacing: -0.02em; }
+        .section-header p { color: var(--text-sub); font-size: 1rem; max-width: 560px; margin: 0 auto; }
+
+        /* BENEFITS & FEATURES */
+        .alt-section { background: var(--bg-alt); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.8rem; transition: all 0.3s; box-shadow: var(--card-shadow); }
+        .card:hover { transform: translateY(-3px); border-color: rgba(37,99,235,0.25); box-shadow: var(--shadow-lg), var(--shadow-glow); }
+        .card-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-bottom: 0.9rem; background: var(--primary-glow); }
+        .card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.35rem; }
+        .card p { color: var(--text-sub); font-size: 0.88rem; line-height: 1.6; }
+
+        /* SHOWCASE */
+        .showcase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+        .showcase-content h3 { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.8rem; letter-spacing: -0.01em; }
+        .showcase-content p { color: var(--text-sub); margin-bottom: 1rem; font-size: 0.95rem; }
+        .showcase-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+        .showcase-list li { display: flex; align-items: center; gap: 0.6rem; color: var(--text-sub); font-size: 0.9rem; }
+        .check { width: 20px; height: 20px; border-radius: 50%; background: rgba(16,185,129,0.12); color: var(--green); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; flex-shrink: 0; }
+        .showcase-visual { background: #111827; border: 1px solid #1F2937; border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--card-shadow); color: #F0F4FF; }
+
+        /* PRICING */
+        .pricing-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; max-width: 1060px; margin: 0 auto; }
+        .price-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.8rem 1.3rem; text-align: center; position: relative; transition: all 0.3s; box-shadow: var(--card-shadow); }
+        .price-card.featured { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary), 0 20px 50px rgba(37,99,235,0.15); }
+        .price-card.featured::before { content: 'MOST POPULAR'; position: absolute; top: -11px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #fff; padding: 0.2rem 0.75rem; border-radius: 100px; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em; -webkit-text-fill-color: #fff; }
+        .price-card:hover { transform: translateY(-4px); }
+        .price-card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.3rem; }
+        .price-card .price { font-size: 2rem; font-weight: 800; margin: 0.7rem 0 0.15rem; letter-spacing: -0.02em; }
+        .price-card .price small { font-size: 0.8rem; font-weight: 400; color: var(--text-muted); -webkit-text-fill-color: var(--text-muted); }
+        .price-note { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 1rem; }
+        .price-features { list-style: none; text-align: left; margin-bottom: 1.3rem; }
+        .price-features li { padding: 0.3rem 0; font-size: 0.82rem; color: var(--text-sub); display: flex; gap: 0.45rem; align-items: center; }
+        .pf-check { color: var(--green); flex-shrink: 0; } .pf-x { color: var(--text-muted); opacity: 0.4; flex-shrink: 0; }
+        .price-card .btn { width: 100%; justify-content: center; }
+
+        /* HOW IT WORKS */
+        .steps-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.8rem; }
+        .step-card { text-align: center; padding: 1.2rem 0.8rem; }
+        .step-num { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; margin: 0 auto 0.8rem; -webkit-text-fill-color: #fff; }
+        .step-card h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.25rem; }
+        .step-card p { font-size: 0.78rem; color: var(--text-sub); }
+
+        /* WHY CHOOSE */
+        .why-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; max-width: 880px; margin: 0 auto; }
+        .why-card { display: flex; gap: 0.9rem; padding: 1.3rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: var(--card-shadow); transition: all 0.3s; }
+        .why-card:hover { border-color: rgba(37,99,235,0.25); transform: translateY(-2px); }
+        .why-icon { width: 38px; height: 38px; border-radius: 10px; background: var(--primary-glow); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+        .why-card h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.15rem; }
+        .why-card p { font-size: 0.82rem; color: var(--text-sub); }
+
+        /* FAQ */
+        .faq-list { max-width: 760px; margin: 0 auto; }
+        .faq-item { border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 0.5rem; overflow: hidden; background: var(--bg-card); transition: border-color 0.2s; }
+        .faq-item:hover { border-color: rgba(37,99,235,0.2); }
+        .faq-q { padding: 1rem 1.3rem; font-weight: 600; font-size: 0.9rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; user-select: none; }
+        .faq-q:hover { background: var(--primary-glow); }
+        .faq-q .arrow { transition: transform 0.3s; font-size: 0.75rem; color: var(--text-muted); }
+        .faq-item.open .faq-q .arrow { transform: rotate(180deg); }
+        .faq-a { padding: 0 1.3rem; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; font-size: 0.88rem; color: var(--text-sub); line-height: 1.7; }
+        .faq-item.open .faq-a { max-height: 300px; padding: 0 1.3rem 1.1rem; }
+
+        /* CTA */
+        .cta-section { background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 50%, #0891B2 100%); padding: 5rem 0; text-align: center; color: #fff; position: relative; overflow: hidden; }
+        .cta-section h2 { font-size: 2.2rem; font-weight: 700; margin-bottom: 0.8rem; letter-spacing: -0.02em; }
+        .cta-section p { font-size: 1rem; opacity: 0.8; margin-bottom: 1.8rem; }
+        .download-info { display: flex; align-items: center; justify-content: center; gap: 2rem; margin-top: 1.5rem; font-size: 0.8rem; opacity: 0.6; }
+
+        /* CONTACT */
+        .contact-section { background: var(--bg-alt); border-top: 1px solid var(--border); }
+        .contact-grid { display: flex; justify-content: center; align-items: center; gap: 1.2rem; flex-wrap: wrap; }
+        .contact-item { display: flex; align-items: center; gap: 0.8rem; padding: 0.9rem 1.3rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); transition: all 0.3s; box-shadow: var(--card-shadow); }
+        .contact-item:hover { border-color: rgba(37,99,235,0.3); transform: translateY(-2px); }
+        .contact-icon { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+        .ci-wa { background: rgba(37,211,102,0.12); } .ci-call { background: rgba(37,99,235,0.12); }
+        .ci-email { background: rgba(245,158,11,0.12); } .ci-fb { background: rgba(59,130,246,0.12); }
+        .contact-label { font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
+        .contact-number { font-size: 0.92rem; font-weight: 700; }
+
+        /* FOOTER */
+        .footer { border-top: 1px solid var(--border); padding: 2rem 0; text-align: center; }
+        .footer-brand { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.6rem; font-weight: 600; font-size: 0.95rem; }
+        .footer-brand img { width: 22px; height: 22px; border-radius: 5px; }
+        .footer p { color: var(--text-muted); font-size: 0.78rem; }
+        .footer-links { display: flex; gap: 1.3rem; justify-content: center; margin-top: 0.6rem; }
+        .footer-links a { color: var(--text-sub); font-size: 0.78rem; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--primary); }
+
+        /* ANIMATIONS */
+        .animate { opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
+        .animate.visible { opacity: 1; transform: translateY(0); }
+        .delay-1 { transition-delay: 0.1s; } .delay-2 { transition-delay: 0.2s; } .delay-3 { transition-delay: 0.3s; }
+        .delay-4 { transition-delay: 0.4s; } .delay-5 { transition-delay: 0.5s; }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero-grid, .showcase-grid, .grid-3, .pricing-grid, .why-grid { grid-template-columns: 1fr; }
+            .steps-grid { grid-template-columns: 1fr 1fr; }
+            .hero-content h1 { font-size: 2.2rem; }
+            .section-header h2, .cta-section h2 { font-size: 1.7rem; }
+            .hero-visual { display: none; }
+            .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--bg-card); flex-direction: column; padding: 1.2rem; border-bottom: 1px solid var(--border); box-shadow: var(--shadow-md); gap: 0.8rem; }
+            .nav-links.show { display: flex; }
+            .mobile-toggle { display: block; }
+            .container { padding: 0 1.25rem; }
+            .section-pad { padding: 4rem 0; }
+            .pricing-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+            .stats-grid { gap: 0.8rem; }
+        }
+        @media (max-width: 480px) { .pricing-grid, .steps-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="#" class="nav-brand"><img src="logo.png" alt="Manager Lokka" /><span>Manager Lokka</span></a>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#benefits">Benefits</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">☀️</button></li>
+                <li class="nav-cta"><a href="#download" class="btn btn-primary">⬇ Download</a></li>
+            </ul>
+            <button class="mobile-toggle" onclick="document.getElementById('nav-links').classList.toggle('show')">☰</button>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <span class="badge" style="margin-bottom:1.2rem;">🚀 Now with Subscription Plans</span>
+                    <h1>Manage Orders.<br/><span class="text-gradient">Grow Your Business.</span></h1>
+                    <p>The all-in-one desktop app for order management, delivery tracking, invoicing, and profitability — built for Sri Lankan businesses.</p>
+                    <div class="hero-actions">
+                        <button class="btn btn-primary btn-lg" onclick="downloadApp()"><span>⬇</span> Download Free Trial</button>
+                        <a href="#pricing" class="btn btn-outline btn-lg">View Plans</a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="app-preview">
+                        <div class="app-titlebar">
+                            <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+                            <span style="flex:1;text-align:center;font-size:0.6rem;color:#64748B;">Manager Lokka</span>
+                        </div>
+                        <div class="app-body">
+                            <div class="mock-sidebar">
+                                <div class="mock-nav active">📊 Dashboard</div>
+                                <div class="mock-nav">📦 Orders</div>
+                                <div class="mock-nav">💰 Expenses</div>
+                                <div class="mock-nav">📄 Invoices</div>
+                                <div class="mock-nav">🏷️ Labels</div>
+                                <div class="mock-nav">📈 Reports</div>
+                            </div>
+                            <div class="mock-main">
+                                <div class="mock-stats">
+                                    <div class="mock-stat-card"><div class="val">156</div><div class="lbl">Orders</div></div>
+                                    <div class="mock-stat-card"><div class="val" style="color:#10B981">Rs 485K</div><div class="lbl">Revenue</div></div>
+                                    <div class="mock-stat-card"><div class="val" style="color:#06B6D4">Rs 198K</div><div class="lbl">Profit</div></div>
+                                </div>
+                                <div class="mock-table">
+                                    <div class="mock-row header"><span>Customer</span><span>Order</span><span>Status</span></div>
+                                    <div class="mock-row"><span>Nimal P.</span><span>Photo Art 12×18</span><span class="mock-badge pending">Pending</span></div>
+                                    <div class="mock-row"><span>Kumari S.</span><span>Teak Frame 10×12</span><span class="mock-badge dispatched">Dispatched</span></div>
+                                    <div class="mock-row"><span>Amila F.</span><span>Classic 8×10</span><span class="mock-badge delivered">Delivered</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats-bar">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card animate"><div class="stat-icon">📅</div><h3 class="text-gradient">4 Days</h3><p>Free Trial</p></div>
+                <div class="stat-card animate delay-1"><div class="stat-icon">⚡</div><h3 class="text-gradient">100%</h3><p>Offline Ready</p></div>
+                <div class="stat-card animate delay-2"><div class="stat-icon">📊</div><h3 class="text-gradient">3 Plans</h3><p>For Every Business</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BENEFITS -->
+    <section class="section-pad alt-section" id="benefits">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="badge">💡 Why Manager Lokka</span>
+                <h2 style="margin-top:0.8rem;">Run Your Business<br/><span class="text-gradient">Smarter & Faster</span></h2>
+                <p>Everything you need to manage orders, track deliveries, and grow — from one powerful desktop app.</p>
+            </div>
+            <div class="grid-3">
+                <div class="card animate"><div class="card-icon">📦</div><h3>Effortless Order Management</h3><p>Create, track, and manage all your orders with statuses, customer info, and delivery details.</p></div>
+                <div class="card animate delay-1"><div class="card-icon">🚚</div><h3>Delivery Workflow Made Easy</h3><p>Track shipments with Koombiyo integration, get waybill numbers, update statuses automatically.</p></div>
+                <div class="card animate delay-2"><div class="card-icon">📊</div><h3>Real-Time Business Insights</h3><p>Revenue, profits, best-sellers, and monthly performance at a glance on the smart dashboard.</p></div>
+                <div class="card animate delay-3"><div class="card-icon">🖨️</div><h3>Professional Labels & Invoices</h3><p>Print shipping labels and invoices with multiple templates, custom branding, thermal support.</p></div>
+                <div class="card animate delay-4"><div class="card-icon">💻</div><h3>Desktop Reliability</h3><p>Works fully offline. Data stays local — fast, reliable, and always accessible.</p></div>
+                <div class="card animate delay-5"><div class="card-icon">🔄</div><h3>Ongoing Updates & Support</h3><p>Subscription includes continuous updates, new features, and dedicated support.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="section-pad" id="features">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="badge">✨ Feature Rich</span>
+                <h2 style="margin-top:0.8rem;">Everything You Need to<br/><span class="text-gradient">Run Your Business</span></h2>
+                <p>From order creation to profit tracking — all in one lightweight desktop app.</p>
+            </div>
+            <div class="grid-3">
+                <div class="card animate"><div class="card-icon">📦</div><h3>Order Management</h3><p>Create, track, and manage orders with statuses, images, customer details, and delivery tracking.</p></div>
+                <div class="card animate delay-1"><div class="card-icon">📊</div><h3>Smart Dashboard</h3><p>Real-time stats, revenue charts, best-selling products, and monthly performance at a glance.</p></div>
+                <div class="card animate delay-2"><div class="card-icon">🚚</div><h3>Koombiyo Integration</h3><p>Auto-send to Koombiyo Delivery, get waybill numbers, and track shipments — all built-in.</p></div>
+                <div class="card animate delay-3"><div class="card-icon">📄</div><h3>Invoice & Labels</h3><p>Professional invoices and shipping labels with multiple templates and thermal print support.</p></div>
+                <div class="card animate delay-4"><div class="card-icon">💬</div><h3>WhatsApp Notifications</h3><p>Send order confirmations, dispatch notices, and delivery updates via WhatsApp with one click.</p></div>
+                <div class="card animate delay-5"><div class="card-icon">💰</div><h3>Profit Tracking</h3><p>Track costs, revenue, expenses, and net profit per order, per month, and per product.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SHOWCASE -->
+    <section class="section-pad alt-section" id="showcase">
+        <div class="container">
+            <div class="showcase-grid">
+                <div class="showcase-content animate">
+                    <span class="badge">📋 Invoice System</span>
+                    <h3 style="margin-top:0.8rem;">Professional Invoices<br/>in Seconds</h3>
+                    <p>Generate beautiful, branded invoices for your customers. Choose templates and customize everything.</p>
+                    <ul class="showcase-list">
+                        <li><span class="check">✓</span> 4 premium invoice templates</li>
+                        <li><span class="check">✓</span> Custom business branding & logo</li>
+                        <li><span class="check">✓</span> Auto-fill from order data</li>
+                        <li><span class="check">✓</span> PDF export & thermal printing</li>
+                        <li><span class="check">✓</span> WhatsApp sharing with one click</li>
+                    </ul>
+                </div>
+                <div class="showcase-visual animate delay-2">
+                    <div style="display:flex;flex-direction:column;gap:0.8rem;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:0.7rem;border-bottom:1px solid #1F2937;">
+                            <h4 style="font-size:0.95rem;color:#60A5FA;">INVOICE #INV-1042</h4>
+                            <span style="font-size:0.75rem;color:#64748B;">Mar 24, 2026</span>
+                        </div>
+                        <div style="font-size:0.75rem;color:#64748B;">Bill To: Thilini Sedarage</div>
+                        <div style="font-size:0.75rem;">
+                            <div style="display:grid;grid-template-columns:2fr 1fr 1fr;padding:0.35rem 0;font-weight:600;color:#64748B;font-size:0.65rem;text-transform:uppercase;"><span>Item</span><span>Qty</span><span style="text-align:right">Amount</span></div>
+                            <div style="display:grid;grid-template-columns:2fr 1fr 1fr;padding:0.35rem 0;border-bottom:1px solid rgba(0,0,0,0.2);"><span>Premium Teak Frame 12×18</span><span>1</span><span style="text-align:right;font-weight:600">Rs 2,950</span></div>
+                            <div style="display:grid;grid-template-columns:2fr 1fr 1fr;padding:0.35rem 0;border-bottom:1px solid rgba(0,0,0,0.2);"><span>Classic Black Frame 10×12</span><span>2</span><span style="text-align:right;font-weight:600">Rs 3,400</span></div>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;font-weight:700;font-size:1rem;padding-top:0.7rem;border-top:2px solid #2563EB;"><span>Total</span><span style="color:#10B981">Rs 6,350</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="section-pad" id="pricing">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="badge">💎 Transparent Pricing</span>
+                <h2 style="margin-top:0.8rem;">Plans for<br/><span class="text-gradient">Every Business Size</span></h2>
+                <p>Start with a 4-day free trial. No credit card needed.</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="price-card animate">
+                    <h3>Free Trial</h3>
+                    <div class="price">Free <small>/ 4 days</small></div>
+                    <p class="price-note">Full access to all features</p>
+                    <ul class="price-features">
+                        <li><span class="pf-check">✓</span> Up to 50 orders</li>
+                        <li><span class="pf-check">✓</span> All features included</li>
+                        <li><span class="pf-check">✓</span> Dashboard & analytics</li>
+                        <li><span class="pf-x">✗</span> Limited to 4 days</li>
+                    </ul>
+                    <button class="btn btn-outline" onclick="downloadApp()">Download Trial</button>
+                </div>
+                <div class="price-card animate delay-1">
+                    <h3>🔵 Starter</h3>
+                    <div class="price">LKR 1,250 <small>/month</small></div>
+                    <p class="price-note">Up to 250 orders per cycle</p>
+                    <ul class="price-features">
+                        <li><span class="pf-check">✓</span> 250 orders/month</li>
+                        <li><span class="pf-check">✓</span> All features included</li>
+                        <li><span class="pf-check">✓</span> Auto-updates</li>
+                        <li><span class="pf-check">✓</span> WhatsApp support</li>
+                    </ul>
+                    <a href="https://wa.me/94760926150?text=Hi%2C%20I%20want%20to%20subscribe%20to%20the%20Starter%20plan" target="_blank" class="btn btn-outline">Get Starter</a>
+                </div>
+                <div class="price-card featured animate delay-2">
+                    <h3>🟣 Pro</h3>
+                    <div class="price">LKR 1,950 <small>/month</small></div>
+                    <p class="price-note">Up to 600 orders per cycle</p>
+                    <ul class="price-features">
+                        <li><span class="pf-check">✓</span> 600 orders/month</li>
+                        <li><span class="pf-check">✓</span> All features included</li>
+                        <li><span class="pf-check">✓</span> Priority support</li>
+                        <li><span class="pf-check">✓</span> Auto-updates</li>
+                    </ul>
+                    <a href="https://wa.me/94760926150?text=Hi%2C%20I%20want%20to%20subscribe%20to%20the%20Pro%20plan" target="_blank" class="btn btn-primary">Get Pro</a>
+                </div>
+                <div class="price-card animate delay-3">
+                    <h3>🟠 Enterprise</h3>
+                    <div class="price">LKR 3,450 <small>/month</small></div>
+                    <p class="price-note">3,000 orders + LKR 5/extra</p>
+                    <ul class="price-features">
+                        <li><span class="pf-check">✓</span> 3,000 included orders</li>
+                        <li><span class="pf-check">✓</span> LKR 5 per extra order</li>
+                        <li><span class="pf-check">✓</span> Priority support</li>
+                        <li><span class="pf-check">✓</span> All features + updates</li>
+                    </ul>
+                    <a href="https://wa.me/94760926150?text=Hi%2C%20I%20want%20to%20subscribe%20to%20the%20Enterprise%20plan" target="_blank" class="btn btn-outline">Get Enterprise</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section-pad alt-section" id="how-it-works">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="badge">🔧 Simple Setup</span>
+                <h2 style="margin-top:0.8rem;">Get Started in<br/><span class="text-gradient">5 Easy Steps</span></h2>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card animate"><div class="step-num">1</div><h4>Download</h4><p>Get the latest installer from our website</p></div>
+                <div class="step-card animate delay-1"><div class="step-num">2</div><h4>Install</h4><p>Run the setup and launch the app</p></div>
+                <div class="step-card animate delay-2"><div class="step-num">3</div><h4>Start Trial</h4><p>Enjoy 4 days of full access for free</p></div>
+                <div class="step-card animate delay-3"><div class="step-num">4</div><h4>Subscribe</h4><p>Choose a plan that fits your needs</p></div>
+                <div class="step-card animate delay-4"><div class="step-num">5</div><h4>Grow</h4><p>Manage orders and grow daily</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY CHOOSE -->
+    <section class="section-pad">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="badge">🏆 Built for You</span>
+                <h2 style="margin-top:0.8rem;">Why Sri Lankan Businesses<br/><span class="text-gradient">Choose Manager Lokka</span></h2>
+            </div>
+            <div class="why-grid">
+                <div class="why-card animate"><div class="why-icon">🎯</div><div><h4>Built for Real Workflow</h4><p>Designed for actual daily business operations.</p></div></div>
+                <div class="why-card animate delay-1"><div class="why-icon">💻</div><div><h4>Fast Desktop Experience</h4><p>Runs locally — no internet lag, no cloud dependency.</p></div></div>
+                <div class="why-card animate delay-2"><div class="why-icon">📈</div><div><h4>Continuous Improvements</h4><p>Subscription includes ongoing updates and features.</p></div></div>
+                <div class="why-card animate delay-3"><div class="why-icon">🔒</div><div><h4>Your Data Stays Local</h4><p>All business data stored on your computer.</p></div></div>
+                <div class="why-card animate delay-4"><div class="why-icon">💰</div><div><h4>Affordable Plans</h4><p>From just LKR 1,250/month for every size.</p></div></div>
+                <div class="why-card animate delay-5"><div class="why-icon">🤝</div><div><h4>Local Support</h4><p>WhatsApp, call, and email support in your language.</p></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section-pad alt-section" id="faq">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="badge">❓ FAQ</span>
+                <h2 style="margin-top:0.8rem;">Frequently Asked<br/><span class="text-gradient">Questions</span></h2>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Is there a free trial? <span class="arrow">▼</span></div><div class="faq-a">Yes! You get a 4-day free trial with full access to all features. No credit card required.</div></div>
+                <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">How does the subscription work? <span class="arrow">▼</span></div><div class="faq-a">Choose a monthly plan (Starter, Pro, or Enterprise) based on your order volume. Contact us via WhatsApp to activate.</div></div>
+                <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">What happens after the trial ends? <span class="arrow">▼</span></div><div class="faq-a">After 4 days, subscribe to continue. Your data is preserved — just activate a key and pick up where you left off.</div></div>
+                <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">How are orders counted? <span class="arrow">▼</span></div><div class="faq-a">Usage is based on orders created during your billing cycle. Deleted/cancelled orders do not reduce the count.</div></div>
+                <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Do deleted orders reduce my usage count? <span class="arrow">▼</span></div><div class="faq-a">No. Once created, an order counts permanently. This ensures fair and consistent billing.</div></div>
+                <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">How do updates work? <span class="arrow">▼</span></div><div class="faq-a">The app auto-checks for updates. When available, update with one click. All subscribers get updates included.</div></div>
+                <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Can I upgrade my plan later? <span class="arrow">▼</span></div><div class="faq-a">Absolutely! Contact us via WhatsApp to upgrade at any time. Changes take effect immediately.</div></div>
+                <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Is my data safe? <span class="arrow">▼</span></div><div class="faq-a">Yes. All business data is stored locally. We only use cloud for subscription validation — your data never leaves your PC.</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DOWNLOAD CTA -->
+    <section class="cta-section" id="download">
+        <div class="container">
+            <h2>Ready to Streamline<br/>Your Business?</h2>
+            <p>Download Manager Lokka and start your free 4-day trial today.</p>
+            <button class="btn btn-white btn-lg" onclick="downloadApp()"><span>⬇</span> Download for Windows</button>
+            <div class="download-info">
+                <span>🪟 Windows 10/11</span>
+                <span>📦 <span id="download-version">Loading...</span></span>
+                <span>📏 ~91 MB</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact-section section-pad" id="contact">
+        <div class="container">
+            <div class="section-header text-center" style="margin-bottom:2rem;">
+                <h2 style="font-size:1.7rem;">📞 <span class="text-gradient">Contact Us</span></h2>
+                <p>Have questions? Want to subscribe? Reach out anytime!</p>
+            </div>
+            <div class="contact-grid">
+                <a href="https://wa.me/94760926150?text=Hi%2C%20I%20am%20interested%20in%20Manager%20Lokka" target="_blank" class="contact-item">
+                    <div class="contact-icon ci-wa">💬</div><div><div class="contact-label">WhatsApp</div><div class="contact-number">076 092 6150</div></div>
+                </a>
+                <a href="tel:+94774195926" class="contact-item">
+                    <div class="contact-icon ci-call">📱</div><div><div class="contact-label">Call</div><div class="contact-number">077 419 5926</div></div>
+                </a>
+                <a href="mailto:managerlokka@gmail.com" class="contact-item">
+                    <div class="contact-icon ci-email">📧</div><div><div class="contact-label">Email</div><div class="contact-number">managerlokka@gmail.com</div></div>
+                </a>
+                <a href="https://web.facebook.com/profile.php?id=61585093238409" target="_blank" class="contact-item">
+                    <div class="contact-icon ci-fb">📘</div><div><div class="contact-label">Facebook</div><div class="contact-number">Manager Lokka</div></div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-brand"><img src="logo.png" alt="" /><span>Manager Lokka</span></div>
+            <p>© 2026 Manager Lokka. All rights reserved.</p>
+            <div class="footer-links"><a href="#features">Features</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="#download">Download</a><a href="#contact">Contact</a></div>
+        </div>
+    </footer>
+
+    <script>
+        // CONFIG
+        const GITHUB_REPO = 'managerlokka/managerlokka';
+        const API_URL = `https://api.github.com/repos/${GITHUB_REPO}/releases/latest`;
+        let downloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest`;
+
+        // NAVBAR SCROLL
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 50));
+
+        // SCROLL ANIMATIONS
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.animate').forEach(el => observer.observe(el));
+
+        // GITHUB AUTO-DOWNLOAD
+        async function fetchLatestRelease() {
+            try {
+                const res = await fetch(API_URL);
+                if (!res.ok) throw new Error();
+                const data = await res.json();
+                const v = data.tag_name || data.name || '';
+                const exe = data.assets?.find(a => a.name.endsWith('.exe') && !a.name.endsWith('.blockmap'));
+                if (exe) downloadUrl = exe.browser_download_url;
+                const el = document.getElementById('download-version');
+                if (el) el.textContent = v || 'Latest';
+            } catch { document.getElementById('download-version').textContent = 'Latest'; }
+        }
+        function downloadApp() { window.open(downloadUrl, '_blank'); }
+        fetchLatestRelease();
+
+        // THEME TOGGLE
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('landing-theme', next);
+            document.getElementById('themeToggle').textContent = next === 'dark' ? '☀️' : '🌙';
+        }
+        // Restore saved theme
+        const saved = localStorage.getItem('landing-theme');
+        if (saved) {
+            document.documentElement.setAttribute('data-theme', saved);
+            document.addEventListener('DOMContentLoaded', () => {
+                document.getElementById('themeToggle').textContent = saved === 'dark' ? '☀️' : '🌙';
+            });
+        }
+    </script>
+</body>
+</html>
