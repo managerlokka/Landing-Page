@@ -180,8 +180,8 @@
         .price-card.featured::before { content: 'MOST POPULAR'; position: absolute; top: -11px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #fff; padding: 0.2rem 0.75rem; border-radius: 100px; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em; -webkit-text-fill-color: #fff; }
         .price-card:hover { transform: translateY(-4px); }
         .price-card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.3rem; }
-        .price-card .price { font-size: 2rem; font-weight: 800; margin: 0.7rem 0 0.15rem; letter-spacing: -0.02em; transition: all 0.3s; }
-        .price-card .price small { font-size: 0.8rem; font-weight: 400; color: var(--text-muted); -webkit-text-fill-color: var(--text-muted); }
+        .price-card .price { font-size: 2rem; font-weight: 800; margin: 0.7rem 0 0.15rem; letter-spacing: -0.02em; transition: all 0.3s; display: flex; align-items: baseline; justify-content: center; gap: 0.2rem; white-space: nowrap; }
+        .price-card .price small { font-size: 0.8rem; font-weight: 400; color: var(--text-muted); -webkit-text-fill-color: var(--text-muted); white-space: nowrap; }
         .price-note { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 1rem; }
         .price-features { list-style: none; text-align: left; margin-bottom: 1.3rem; }
         .price-features li { padding: 0.3rem 0; font-size: 0.82rem; color: var(--text-sub); display: flex; gap: 0.45rem; align-items: center; }
@@ -430,8 +430,8 @@
             </div>
             <div class="billing-toggle" id="billingToggle">
                 <button class="active" data-term="monthly" onclick="switchBilling('monthly')">Monthly</button>
-                <button data-term="yearly" onclick="switchBilling('yearly')">Yearly <span class="save-badge">Save 17%</span></button>
-                <button data-term="two_year" onclick="switchBilling('two_year')">2 Years <span class="save-badge">Save 17%</span></button>
+                <button data-term="yearly" onclick="switchBilling('yearly')">Yearly <span class="save-badge">Save 17% · 2 months free</span></button>
+                <button data-term="two_year" onclick="switchBilling('two_year')">2 Years <span class="save-badge">Save 17% · 4 months free</span></button>
             </div>
             <div class="pricing-grid">
                 <div class="price-card animate">
@@ -448,7 +448,7 @@
                 </div>
                 <div class="price-card animate delay-1">
                     <h3>🔵 Starter</h3>
-                    <div class="price" id="price-starter">LKR 1,250 <small>/month</small></div>
+                    <div class="price" id="price-starter"><span>LKR 1,250</span><small>/month</small></div>
                     <p class="price-note">Up to 250 orders per cycle</p>
                     <ul class="price-features">
                         <li><span class="pf-check">✓</span> 250 orders/month</li>
@@ -460,7 +460,7 @@
                 </div>
                 <div class="price-card featured animate delay-2">
                     <h3>🟣 Pro</h3>
-                    <div class="price" id="price-pro">LKR 1,950 <small>/month</small></div>
+                    <div class="price" id="price-pro"><span>LKR 1,950</span><small>/month</small></div>
                     <p class="price-note">Up to 600 orders per cycle</p>
                     <ul class="price-features">
                         <li><span class="pf-check">✓</span> 600 orders/month</li>
@@ -472,7 +472,7 @@
                 </div>
                 <div class="price-card animate delay-3">
                     <h3>🟠 Enterprise</h3>
-                    <div class="price" id="price-enterprise">LKR 3,450 <small>/month</small></div>
+                    <div class="price" id="price-enterprise"><span>LKR 3,450</span><small>/month</small></div>
                     <p class="price-note">3,000 orders + LKR 5/extra</p>
                     <ul class="price-features">
                         <li><span class="pf-check">✓</span> 3,000 included orders</li>
@@ -633,7 +633,7 @@
             document.querySelector(`.billing-toggle button[data-term="${term}"]`).classList.add('active');
             ['starter', 'pro', 'enterprise'].forEach(plan => {
                 const el = document.getElementById(`price-${plan}`);
-                if (el) el.innerHTML = `LKR ${billingPrices[plan][term]} <small>${billingLabels[term]}</small>`;
+                if (el) el.innerHTML = `<span>LKR ${billingPrices[plan][term]}</span><small>${billingLabels[term]}</small>`;
             });
         }
 
