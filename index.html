@@ -267,6 +267,43 @@
             .stats-grid { gap: 0.8rem; }
         }
         @media (max-width: 480px) { .pricing-grid, .steps-grid { grid-template-columns: 1fr; } }
+
+        /* YOUTUBE TUTORIALS */
+        .tutorials-section { background: var(--bg); }
+        .tutorials-wrapper { position: relative; }
+        .tutorials-scroll { display: flex; gap: 1.2rem; overflow-x: auto; scroll-behavior: smooth; padding: 0.5rem 0 1.5rem; scrollbar-width: thin; scrollbar-color: var(--border-light) transparent; -webkit-overflow-scrolling: touch; }
+        .tutorials-scroll::-webkit-scrollbar { height: 6px; }
+        .tutorials-scroll::-webkit-scrollbar-track { background: transparent; }
+        .tutorials-scroll::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 10px; }
+        .tutorials-scroll::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+        .tutorial-card { flex: 0 0 320px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: all 0.3s ease; box-shadow: var(--card-shadow); cursor: pointer; text-decoration: none; color: var(--text); }
+        .tutorial-card:hover { transform: translateY(-4px); border-color: rgba(37,99,235,0.3); box-shadow: var(--shadow-lg), var(--shadow-glow); }
+        .tutorial-thumb { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; background: #000; }
+        .tutorial-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+        .tutorial-card:hover .tutorial-thumb img { transform: scale(1.05); }
+        .tutorial-play { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); opacity: 0; transition: opacity 0.3s; }
+        .tutorial-card:hover .tutorial-play { opacity: 1; }
+        .tutorial-play-icon { width: 48px; height: 48px; background: rgba(255,0,0,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+        .tutorial-play-icon::after { content: ''; width: 0; height: 0; border-left: 16px solid #fff; border-top: 10px solid transparent; border-bottom: 10px solid transparent; margin-left: 3px; }
+        .tutorial-info { padding: 1rem 1.2rem; }
+        .tutorial-info h4 { font-size: 0.88rem; font-weight: 600; line-height: 1.4; margin-bottom: 0.3rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .tutorial-info p { font-size: 0.75rem; color: var(--text-muted); }
+        .tutorials-nav { position: absolute; top: 50%; transform: translateY(-70%); width: 38px; height: 38px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border); color: var(--text); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; z-index: 2; transition: all 0.2s; box-shadow: var(--shadow-md); }
+        .tutorials-nav:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+        .tutorials-nav.prev { left: -12px; }
+        .tutorials-nav.next { right: -12px; }
+        .tutorials-loading { display: flex; align-items: center; justify-content: center; padding: 3rem; color: var(--text-muted); font-size: 0.9rem; gap: 0.6rem; }
+        .tutorials-loading .spinner { width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .view-all-card { flex: 0 0 220px; background: var(--primary-glow); border: 1px dashed rgba(37,99,235,0.3); border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem; min-height: 240px; transition: all 0.3s; text-decoration: none; color: var(--primary); }
+        .view-all-card:hover { background: rgba(37,99,235,0.12); border-color: var(--primary); transform: translateY(-4px); }
+        .view-all-icon { font-size: 2rem; }
+        .view-all-text { font-weight: 600; font-size: 0.9rem; }
+        @media (max-width: 768px) {
+            .tutorial-card { flex: 0 0 280px; }
+            .tutorials-nav { display: none; }
+            .view-all-card { flex: 0 0 180px; }
+        }
     </style>
 </head>
 <body>
@@ -541,6 +578,27 @@
         </div>
     </section>
 
+    <!-- YOUTUBE TUTORIALS -->
+    <section class="tutorials-section section-pad" id="tutorials">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="badge">🎬 Video Tutorials</span>
+                <h2 style="margin-top:0.8rem;">Learn How to Use<br/><span class="text-gradient">Manager Lokka</span></h2>
+                <p>Watch step-by-step tutorials to get the most out of every feature.</p>
+            </div>
+            <div class="tutorials-wrapper">
+                <button class="tutorials-nav prev" onclick="scrollTutorials(-1)" aria-label="Previous">‹</button>
+                <div class="tutorials-scroll" id="tutorials-scroll">
+                    <div class="tutorials-loading" id="tutorials-loading">
+                        <div class="spinner"></div>
+                        <span>Loading tutorials...</span>
+                    </div>
+                </div>
+                <button class="tutorials-nav next" onclick="scrollTutorials(1)" aria-label="Next">›</button>
+            </div>
+        </div>
+    </section>
+
     <!-- DOWNLOAD CTA -->
     <section class="cta-section" id="download">
         <div class="container">
@@ -619,6 +677,75 @@
         }
         function downloadApp() { window.open(downloadUrl, '_blank'); }
         fetchLatestRelease();
+
+        // YOUTUBE PLAYLIST — auto-fetches videos from playlist
+        const YT_PLAYLIST_ID = 'PL9ygANbJFA-wlgyCC1xW16OREuhbCNXbN';
+        const YT_API_KEY = 'AIzaSyDcfiFIRObcVVjxNv63qrZoJhJM_s7f824';
+        const YT_MAX_RESULTS = 20;
+
+        async function loadYouTubeTutorials() {
+            const container = document.getElementById('tutorials-scroll');
+            const loading = document.getElementById('tutorials-loading');
+            try {
+                const res = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=${YT_MAX_RESULTS}&playlistId=${YT_PLAYLIST_ID}&key=${YT_API_KEY}`);
+                if (!res.ok) throw new Error('API request failed');
+                const data = await res.json();
+                if (!data.items || data.items.length === 0) throw new Error('No videos');
+
+                loading.remove();
+                data.items.forEach((item, i) => {
+                    const snippet = item.snippet;
+                    const videoId = snippet.resourceId?.videoId;
+                    if (!videoId) return;
+                    const thumb = snippet.thumbnails?.medium?.url || snippet.thumbnails?.default?.url || '';
+                    const title = snippet.title || 'Tutorial';
+                    const date = new Date(snippet.publishedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+                    const card = document.createElement('a');
+                    card.className = `tutorial-card animate${i < 6 ? ` delay-${i}` : ''}`;
+                    card.href = `https://www.youtube.com/watch?v=${videoId}&list=${YT_PLAYLIST_ID}`;
+                    card.target = '_blank';
+                    card.rel = 'noopener';
+                    card.innerHTML = `
+                        <div class="tutorial-thumb">
+                            <img src="${thumb}" alt="${title}" loading="lazy" />
+                            <div class="tutorial-play"><div class="tutorial-play-icon"></div></div>
+                        </div>
+                        <div class="tutorial-info">
+                            <h4>${title}</h4>
+                            <p>${date}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+
+                // "View All" card
+                const viewAll = document.createElement('a');
+                viewAll.className = 'view-all-card';
+                viewAll.href = `https://youtube.com/playlist?list=${YT_PLAYLIST_ID}`;
+                viewAll.target = '_blank';
+                viewAll.rel = 'noopener';
+                viewAll.innerHTML = '<div class="view-all-icon">▶️</div><div class="view-all-text">View All on YouTube</div>';
+                container.appendChild(viewAll);
+
+                // Re-observe for animations
+                container.querySelectorAll('.animate').forEach(el => observer.observe(el));
+            } catch (e) {
+                console.warn('[YouTube] Playlist fetch failed:', e.message);
+                loading.innerHTML = `
+                    <a href="https://youtube.com/playlist?list=${YT_PLAYLIST_ID}" target="_blank" 
+                       style="display:flex;align-items:center;gap:0.6rem;color:var(--primary);font-weight:600;text-decoration:none;">
+                        ▶️ Watch Tutorials on YouTube
+                    </a>`;
+            }
+        }
+
+        function scrollTutorials(dir) {
+            const el = document.getElementById('tutorials-scroll');
+            el.scrollBy({ left: dir * 340, behavior: 'smooth' });
+        }
+
+        loadYouTubeTutorials();
 
         // BILLING TOGGLE
         const billingPrices = {
